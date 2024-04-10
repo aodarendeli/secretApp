@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  frontend:
+    build: ./client/freedom
+    container_name: react-app
+    ports:
+     - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends on:
+     - backend
+    networks:
+     - mern-network
+
+   backend:
+    build: ./api
+    container_name: node-api
+    restart: always
+    ports:
+     - "5000:5000"
+    depends-on:
+     - database
+    networks:
+     - mern-network
+
+   database:
+    image: mongo
+    container_name: mongo
+    ports: 
+     - "27017:27017"
+    volumes:
+     - /home/ozgur/mongo-backup:/data/db
+    networks:
+     - mern-network
+
+ networks:
+   mern-network:
+    driver: bridge
+
